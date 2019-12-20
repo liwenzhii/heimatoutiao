@@ -38,6 +38,7 @@ export default {
     .slideBgc {
         height: 100vh;
         background-color:#323745;
+        overflow: hidden;
     }
 
 </style>

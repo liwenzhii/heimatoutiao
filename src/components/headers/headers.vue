@@ -8,18 +8,14 @@
       <el-col :span="6">
         <el-row type="flex" justify="end" align="middle">
           <div>
-            <img src="../../assets/img/F201111281505181366600000.jpg" class="userPic" />
+            <img :src = "userInfo.photo" class="userPic" />
           </div>
-          <el-dropdown >
-
-            <span> 艾因斯坦
-            <i class="el-icon-caret-bottom"></i>
-            </span>
+          <el-dropdown @command='handleCommand'>
+            <span> {{userInfo.name}}</span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item >个人信息</el-dropdown-item>
-              <el-dropdown-item >Git地址</el-dropdown-item>
-              <el-dropdown-item >退出</el-dropdown-item>
-
+              <el-dropdown-item command='personImformation' >个人信息</el-dropdown-item>
+              <el-dropdown-item command='address'>Git地址</el-dropdown-item>
+              <el-dropdown-item command='quit'>退出</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </el-row>
@@ -30,9 +26,33 @@
 
 <script>
 export default {
+  data () {
+    return {
+      userInfo: {},
+      picAddress: require('../../assets/img/F201111281505181366600000.jpg')
+    }
+  },
+  created () {
+    let token = window.localStorage.getItem('user-token')
+    this.$http({
+      url: '/user/profile',
+      method: 'get',
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then(res => {
+      this.userInfo = res.data.data
+      console.log(this.userInfo.photo)
+    })
+  },
   methods: {
-    getFormation () {
-      alert('niaho')
+    handleCommand (command) {
+      if (command === 'address') {
+        window.location.href = 'https://github.com/liwenzhii/heimatoutiao.git'
+      } else if (command === 'quit') {
+        window.localStorage.removeItem('user-token')
+        this.$router.push('/login')
+      }
     }
   }
 }

@@ -13,13 +13,9 @@
 </template>
 
 <script>
-import slidebar from '../../components/silebar/slide/index'
-import headers from '../../components/headers/headers'
+
 export default {
-  components: {
-    slidebar,
-    headers
-  }
+
 }
 </script>
 
