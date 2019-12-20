@@ -7,7 +7,9 @@
           <el-header >
               <headers></headers>
           </el-header>
-          <el-main >这是主题</el-main>
+          <el-main style="padding:0">
+            <router-view></router-view>
+          </el-main>
       </el-container>
   </el-container>
 </template>
