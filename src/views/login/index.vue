@@ -57,14 +57,8 @@ export default {
             method: 'post',
             data: this.formData
           }).then((res) => {
-            window.localStorage.setItem('user-token', res.data.data.token)
+            window.localStorage.setItem('user-token', res.data.token)
             this.$router.push('/home')
-          }).catch((res) => {
-            console.log(res)
-            this.$message({
-              message: '登陆失败！',
-              type: 'warning'
-            })
           })
         }
       })

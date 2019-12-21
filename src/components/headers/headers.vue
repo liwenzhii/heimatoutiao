@@ -33,15 +33,11 @@ export default {
     }
   },
   created () {
-    let token = window.localStorage.getItem('user-token')
     this.$http({
-      url: '/user/profile',
-      method: 'get',
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+      url: '/user/profile'
+
     }).then(res => {
-      this.userInfo = res.data.data
+      this.userInfo = res.data
       console.log(this.userInfo.photo)
     })
   },

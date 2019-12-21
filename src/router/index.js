@@ -21,6 +21,10 @@ const routes = [
     children: [{
       path: '',
       component: mainVue
+    },
+    {
+      path: 'commant',
+      component: () => import('../views/home/commant.vue')
     }]
   }
 ]
