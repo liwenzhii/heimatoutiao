@@ -3,11 +3,11 @@
       <common slot="header">
           <template slot="title">素材管理</template>
       </common>
-      <el-tabs  type="card" v-model="activeName">
+      <el-tabs  type="card" v-model="activeName" @tab-click="changeTab">
           <el-tab-pane label="全部素材"  name="all">
               <!-- 放全部素材 -->
               <div class="uaerAllPic">
-                  <el-card v-for="item in list" :key = 'item.id' class="userPicture">
+                  <el-card v-for="item in list" :key = 'item.id' class="userPicture" >
                       <div class="imgPicBox">
                       <img :src="item.url" alt="" class="imgPic" >
 
@@ -21,6 +21,15 @@
           </el-tab-pane>
           <el-tab-pane label="收藏素材"  name="collect">
               <!-- 放收藏素材 -->
+              <div class="uaerAllPic">
+                  <el-card v-for="item in list" :key = 'item.id' class="userPicture" >
+                      <div class="imgPicBox">
+                      <img :src="item.url" alt="" class="imgPic" >
+
+                      </div>
+
+                  </el-card>
+              </div>
           </el-tab-pane>
       </el-tabs>
   </el-card>
@@ -34,16 +43,24 @@ export default {
       list: []
     }
   },
+  methods: {
+    changeTab () {
+      this.getPic()
+    },
+    getPic () {
+      this.$http({
+        url: 'user/images',
+        params: {
+          collect: this.activeName === 'collect'
+        }
+      }).then((res) => {
+        this.list = res.data.results
+        console.log(this.list)
+      })
+    }
+  },
   created () {
-    this.$http({
-      url: 'user/images',
-      params: {
-        collect: false
-      }
-    }).then((res) => {
-      this.list = res.data.results
-      console.log(this.list)
-    })
+    this.getPic()
   }
 }
 </script>
@@ -55,7 +72,7 @@ export default {
     }
      .userPicture{
          width: 230px;
-         height: 250px;
+        padding: 0;
          margin: 25px 35px;
 
      }
@@ -71,10 +88,17 @@ export default {
 
     }
     .icon  {
+        width: 230px;
         display: flex;
         justify-content: space-around;
-        align-items: flex-end;
+        align-items: center;
         margin-top: 15px;
-        font-size: 18px
+        font-size: 18px;
+        background-color: #f4f5f6;
+        height: 45px;
+        line-height: 45px;
+        margin-bottom: -20px;
+        margin-left: -20px
+
     }
 </style>
