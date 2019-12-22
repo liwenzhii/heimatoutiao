@@ -13,6 +13,7 @@ axios.interceptors.request.use(function (config) {
 // 对请求到达.then之前进行处理
 axios.defaults.transformResponse = [function (data) {
   console.log(data)
+
   return JSONBig.parse(data)
 }]
 axios.interceptors.response.use(function (response) {

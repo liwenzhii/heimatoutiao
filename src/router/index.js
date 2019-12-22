@@ -25,6 +25,10 @@ const routes = [
     {
       path: 'commant',
       component: () => import('../views/home/commant.vue')
+    },
+    {
+      path: 'material',
+      component: () => import('../views/home/meteri.vue')
     }]
   }
 ]
