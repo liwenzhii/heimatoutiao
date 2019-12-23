@@ -36,7 +36,7 @@ export default {
 
 <style scoped lang='less'>
     .slideBgc {
-        height: 100vh;
+        height: 100%;
         background-color:#323745;
         overflow: hidden;
     }
