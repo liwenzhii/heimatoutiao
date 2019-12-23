@@ -11,7 +11,6 @@ axios.interceptors.request.use(function (config) {
 }, function () {})
 // 请求到达响应拦截器之前处理
 axios.defaults.transformResponse = [function (data) {
-  console.log(data)
   return jsonBig.parse(data)
 }]
 // 对请求到达.then之前进行处理

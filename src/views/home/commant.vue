@@ -1,6 +1,6 @@
 <template>
   <div>
-      <el-card>
+      <el-card v-loading = "loading">
         <common slot="header">
           <template slot="title">评论列表</template>
         </common>
@@ -17,6 +17,17 @@
             </template>
           </el-table-column>
         </el-table>
+        <el-row style="height: 80px" type="flex" justify="center" align="middle">
+          <el-pagination
+            background
+            layout="prev, pager, next"
+            :total= "page.total"
+            :page-size =  "page.pageSize"
+            :current-page = 'page.currentPage'
+            @current-change = "changePage"
+            >
+          </el-pagination>
+        </el-row>
       </el-card>
   </div>
 </template>
@@ -25,24 +36,41 @@
 export default {
   data () {
     return {
-      list: []
+      loading: false,
+      list: [],
+      page: {
+        total: 0,
+        pageSize: 10,
+        currentPage: 1
+      }
     }
   },
   methods: {
+    changePage (newPage) {
+      this.loading = true
+      this.page.currentPage = newPage
+      this.getList()
+    },
     formatterBool (row, column, cellValue, index) {
       return row.comment_status ? '打开' : '关闭'
     },
     getList () {
+      this.loading = true
       this.$http({
         url: '/articles',
         params: {
-          response_type: 'comment'
+          response_type: 'comment',
+          page: this.page.currentPage,
+          per_page: this.page.pageSize
         }
       }).then((res) => {
+        this.loading = false
         this.list = res.data.results
+        this.page.total = res.data.total_count
       })
     },
     putComment (row) {
+      this.loading = true
       let mess = row.comment_status ? '关闭' : '打开'
       this.$confirm(`你确定要${mess}这条评论吗？`).then(() => {
         this.$http({
@@ -56,21 +84,14 @@ export default {
           }
         })
           .then(() => {
+            this.loading = false
             this.$message({
               type: 'success',
               message: '操作成功'
             })
             this.getList()
           })
-          .catch(() => {
-            this.$message({
-              type: 'warning',
-              message: '操作失败'
-            })
-          })
-        console.log('你好')
       })
-      console.log(row)
     }
   },
   created () {
