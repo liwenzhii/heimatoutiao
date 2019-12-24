@@ -29,6 +29,10 @@ const routes = [
     {
       path: 'material',
       component: () => import('../views/home/meteri.vue')
+    },
+    {
+      path: 'articles',
+      component: () => import('../views/home/articles.vue')
     }]
   }
 ]

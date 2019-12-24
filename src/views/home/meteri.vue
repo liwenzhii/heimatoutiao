@@ -18,7 +18,7 @@
               <img :src="item.url" alt class="imgPic" />
             </div>
             <div class="icon">
-              <i class="el-icon-star-on"></i>
+              <i class="el-icon-star-on" style="{`color: item.is_collect ? red : ''`}"></i>
               <i class="el-icon-delete-solid"></i>
             </div>
           </el-card>
@@ -102,7 +102,7 @@ export default {
       }).then(res => {
         this.list = res.data.results
         this.page.total = res.data.total_count
-        console.log(res.data.total_count)
+        console.log(res.data.results)
       })
     }
   },
