@@ -4,7 +4,7 @@
         <img src="../../../assets/img/logo_admin.png" style="height: 35px">
     </div>
   <el-menu router style="width:231px" background-color="#353b4e" text-color="#adafb5" >
-      <el-menu-item>
+      <el-menu-item index="/home">
           <span slot="title">首页</span>
       </el-menu-item>
       <el-submenu index='1'>
@@ -36,7 +36,11 @@ export default {
 
 <style scoped lang='less'>
     .slideBgc {
+<<<<<<< HEAD
         height: 100%;
+=======
+        height:100%;
+>>>>>>> 8c99508d94c2cdfd24e455a5f02bd7a4c1597d76
         background-color:#323745;
         overflow: hidden;
     }

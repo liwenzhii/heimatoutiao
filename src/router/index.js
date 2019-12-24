@@ -28,7 +28,11 @@ const routes = [
     },
     {
       path: 'material',
+<<<<<<< HEAD
       component: () => import('../views/home/material.vue')
+=======
+      component: () => import('../views/home/meteri.vue')
+>>>>>>> 8c99508d94c2cdfd24e455a5f02bd7a4c1597d76
     }]
   }
 ]
