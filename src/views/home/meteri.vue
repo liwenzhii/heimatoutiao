@@ -79,9 +79,7 @@ export default {
         method: 'post'
       }).then((res) => {
         this.getPic()
-        console.log(res)
       })
-      console.log(params)
     },
     changePage (newPage) {
       this.page.currentPage = newPage
@@ -102,7 +100,6 @@ export default {
       }).then(res => {
         this.list = res.data.results
         this.page.total = res.data.total_count
-        console.log(res.data.results)
       })
     }
   },

@@ -10,7 +10,7 @@
           <span>文章状态</span>
         </el-col>
         <el-col :span="10">
-          <el-radio-group v-model="formDate.status">
+          <el-radio-group v-model="formDate.status" @change="searchArticle">
             <el-radio :label="5">全部</el-radio>
             <el-radio :label="0">草稿</el-radio>
             <el-radio :label="1">待审核</el-radio>
@@ -22,7 +22,7 @@
       <el-row type="flex" align="middle" style="height: 80px">
         <el-col :span="2">频道列表</el-col>
         <el-col :span="5">
-          <el-select v-model="formDate.channel_id">
+          <el-select v-model="formDate.channel_id" @change="searchArticle">
             <el-option v-for="item in list"
             :key="item.id"
             :label="item.name"
@@ -34,6 +34,8 @@
         <el-col :span="2">时间选择</el-col>
         <el-col :span="8">
              <el-date-picker
+                 @change="searchArticle"
+                value-format='yyyy-MM-dd'
                 v-model="formDate.dataRange"
                 type="daterange"
                 align="right"
@@ -46,28 +48,39 @@
         </el-col>
     </el-row>
     <el-row>
-        <div class="sectHeader">共找到62289条符合条件的内容</div>
+        <div class="sectHeader">共找到{{page.total}}条符合条件的内容</div>
     </el-row>
-    <el-row type="flex" justify="space-between">
+    <el-row v-for="item in articleList" :key="item.id.toString()" type="flex" justify="space-between" style="padding: 20px 0; border-bottom: 1px dashed #ccc">
         <el-col :span="12">
             <el-row type="flex" align="middle">
-            <img src="../../assets/img/hh.png" class = "updateImages">
+            <img :src="item.cover.images ? item.cover.images[0] : defaultImg" class = "updateImages">
             <span style="display: inline-block; margin-left: 15px">
-                <div  class="comment">hdhdh回电话电话</div>
-                <el-tag>已发表</el-tag>
-                <div class="comment">2019-12-12  16:16:16</div>
+                <div  class="comment">{{item.title}}</div>
+                <el-tag :type="item.status | filterType">{{item.status | filterNum}}</el-tag>
+                <div class="comment">{{item.pubdate}}</div>
             </span>
 
             </el-row>
         </el-col>
         <el-col :span="4">
-            <el-row type="flex" justify="end">
+            <el-row type="flex" justify="end" >
                 <span class='putIcon'><i class="el-icon-edit"></i>
                     修改</span>
-                <span class='deleteIcon'><i class="el-icon-delete"></i>
+                <span class='deleteIcon'><i class="el-icon-delete" @click = 'deleteArticle(item.id)'></i>
                     删除</span>
             </el-row>
         </el-col>
+    </el-row>
+    <el-row>
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="page.total"
+        :page-size='page.pageSize'
+        :current-page='page.currentPage'
+        @current-change = 'changePage'
+        >
+      </el-pagination>
     </el-row>
     </el-card>
   </div>
@@ -82,21 +95,106 @@ export default {
         channel_id: null,
         dataRange: []
       },
-      list: []
+      list: [],
+      articleList: [],
+      defaultImg: require('../../assets/img/home.jpg'),
+      page: {
+        total: 0,
+        pageSize: 10,
+        currentPage: 1
+      }
     }
   },
   methods: {
+    deleteArticle (id) {
+      console.log(id.toString())
+      debugger
+
+      this.$confirm('你去定要删除吗？').then(() => {
+        this.$http({
+          method: 'delete',
+          url: `/articles/${id.toString()}`
+        }).then(() => {
+          this.$message({
+            message: '删除成功',
+            type: 'success'
+
+          })
+        }).catch(() => {
+          debugger
+        })
+      })
+    },
     getChannels () {
       this.$http({
         url: '/channels'
       }).then((res) => {
         this.list = res.data.channels
-        console.log(res)
       })
+    },
+    getArticle (params) {
+      this.$http({
+        url: '/articles',
+        params
+      }).then((res) => {
+        this.articleList = res.data.results
+        this.page.total = res.data.total_count
+        console.log(this.articleList)
+      })
+    },
+    searchArticle () {
+      this.page.currentPage = 1
+      this.getSearchArticle()
+    },
+    changePage (newPage) {
+      this.page.currentPage = newPage
+      this.getSearchArticle()
+    },
+    getSearchArticle () {
+      let params = {
+        page: this.page.currentPage,
+        per_page: this.formDate.pageSize,
+        status: this.formDate.status === 5 ? null : this.formDate.status,
+        channel_id: this.formDate.channel_id,
+        begin_pubdate: this.formDate.dataRange.length ? this.formDate.dataRange[0] : null,
+        end_pubdate: this.formDate.dataRange.length > 1 ? this.formDate.dataRange[1] : null
+      }
+      this.getArticle(params)
+    }
+  },
+  filters: {
+    filterNum (value) {
+      switch (value) {
+        case 0:
+          return '草稿'
+        case 1:
+          return '待审核'
+        case 2:
+          return '已发表'
+        case 3:
+          return '审核失败'
+        default:
+          break
+      }
+    },
+    filterType (value) {
+      switch (value) {
+        case 0:
+          return 'info'
+        case 1:
+          return 'danger'
+        case 2:
+          return ''
+        case 3:
+          return 'warning'
+        default:
+          break
+      }
     }
   },
   created () {
     this.getChannels()
+    this.getArticle()
   }
 }
 </script>
@@ -119,10 +217,12 @@ export default {
     .putIcon {
         margin-top: 15px;
         font-size: 14px;
-        margin-right: 15px
+        margin-right: 15px;
+        cursor: pointer;
     }
     .deleteIcon {
         margin-top: 15px;
         font-size: 14px;
+        cursor: pointer;
     }
 </style>
