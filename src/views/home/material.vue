@@ -17,8 +17,8 @@
                 <img :src="item.url" class="updataImg" />
               </div>
               <el-row class="smIcon">
-                <i class="el-icon-star-on"></i>
-                <i class="el-icon-delete-solid"></i>
+                <i class="wordIcon el-icon-star-on" style=""></i>
+                <i class="wordIcon el-icon-delete-solid"></i>
               </el-row>
             </el-card>
           </div>
@@ -61,6 +61,7 @@
 export default {
   data () {
     return {
+      isCollect: '',
       loading: false,
       activeName: 'all',
       list: [],
@@ -112,6 +113,8 @@ export default {
         }, 120)
         this.list = res.data.results
         this.page.total = res.data.total_count
+        this.isCollect = res.data.is_collect
+        console.log(this.isCollect)
       })
     }
   },
@@ -121,9 +124,9 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .el-card__body {
-  /* padding: 0; */
+  padding: 0;
 }
 .picAllBox {
   display: flex;
@@ -150,5 +153,9 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.wordIcon {
+  cursor: pointer;
+
 }
 </style>

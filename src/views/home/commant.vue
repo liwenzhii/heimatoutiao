@@ -11,9 +11,8 @@
           <el-table-column prop="fans_comment_count" label="粉丝评论数"></el-table-column>
           <el-table-column  label="操作" width="200" >
             <template slot-scope="obj">
-            <el-button size="small">修改</el-button>
-            <el-button size="small" @click="putComment(obj.row)">{{obj.row.comment_status ? "关闭评论" : '打开评论'}}</el-button>
-
+               <el-button size="small">修改</el-button>
+               <el-button size="small" @click="putComment(obj.row)">{{obj.row.comment_status ? "关闭评论" : '打开评论'}}</el-button>
             </template>
           </el-table-column>
         </el-table>
