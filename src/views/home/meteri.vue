@@ -18,8 +18,10 @@
               <img :src="item.url" alt class="imgPic" />
             </div>
             <div class="icon">
-              <i class="el-icon-star-on" style="{`color: item.is_collect ? red : ''`}"></i>
-              <i class="el-icon-delete-solid"></i>
+              <i class="el-icon-star-on"
+               :style="{color: item.is_collected ? 'red' : ''}"
+               @click="isCollect(item)"></i>
+              <i class="el-icon-delete-solid" @click="delMaterial(item.id)"></i>
             </div>
           </el-card>
             <el-row type='flex' style='height: 80px; width: 100%' justify="center" align="middle" >
@@ -70,6 +72,31 @@ export default {
     }
   },
   methods: {
+    delMaterial (id) {
+      this.$confirm('你确定要删除吗？').then(() => {
+        this.$http({
+          method: 'delete',
+          url: `/user/images/${id}`
+        }).then(() => {
+          this.$message({
+            message: '删除成功',
+            type: 'success'
+          })
+          this.getPic()
+        })
+      })
+    },
+    isCollect (item) {
+      this.$http({
+        url: `/user/images/${item.id}`,
+        method: 'put',
+        data: {
+          collect: !item.is_collected
+        }
+      }).then((res) => {
+        this.getPic()
+      })
+    },
     uploadImg (params) {
       let form = new FormData()
       form.append('image', params.file)

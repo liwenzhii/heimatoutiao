@@ -53,7 +53,7 @@
     <el-row v-for="item in articleList" :key="item.id.toString()" type="flex" justify="space-between" style="padding: 20px 0; border-bottom: 1px dashed #ccc">
         <el-col :span="12">
             <el-row type="flex" align="middle">
-            <img :src="item.cover.images ? item.cover.images[0] : defaultImg" class = "updateImages">
+            <img :src="item.cover.images.length ? item.cover.images[0] : defaultImg" class = "updateImages">
             <span style="display: inline-block; margin-left: 15px">
                 <div  class="comment">{{item.title}}</div>
                 <el-tag :type="item.status | filterType">{{item.status | filterNum}}</el-tag>
@@ -64,14 +64,14 @@
         </el-col>
         <el-col :span="4">
             <el-row type="flex" justify="end" >
-                <span class='putIcon'><i class="el-icon-edit"></i>
+                <span class='putIcon'  @click="putArticle"><i class="el-icon-edit"></i>
                     修改</span>
-                <span class='deleteIcon'><i class="el-icon-delete" @click = 'deleteArticle(item.id)'></i>
+                <span class='deleteIcon' @click = 'deleteArticle(item.id)'><i class="el-icon-delete" ></i>
                     删除</span>
             </el-row>
         </el-col>
     </el-row>
-    <el-row>
+    <el-row type="flex" style="height: 80px" justify="center" align="middle">
       <el-pagination
         background
         layout="prev, pager, next"
@@ -97,7 +97,7 @@ export default {
       },
       list: [],
       articleList: [],
-      defaultImg: require('../../assets/img/home.jpg'),
+      defaultImg: require('../../assets/img/hh.png'),
       page: {
         total: 0,
         pageSize: 10,
@@ -106,22 +106,27 @@ export default {
     }
   },
   methods: {
+    putArticle () {
+      this.$router.push('/home/publish')
+    },
     deleteArticle (id) {
       console.log(id.toString())
-      debugger
+      // debugger
 
       this.$confirm('你去定要删除吗？').then(() => {
         this.$http({
           method: 'delete',
           url: `/articles/${id.toString()}`
-        }).then(() => {
+        }).then((res) => {
+          console.log(res)
           this.$message({
             message: '删除成功',
             type: 'success'
 
           })
+          this.getSearchArticle()
         }).catch(() => {
-          debugger
+
         })
       })
     },
