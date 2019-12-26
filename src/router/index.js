@@ -37,6 +37,10 @@ const routes = [
     {
       path: 'publish',
       component: () => import('../views/home/publish.vue')
+    },
+    {
+      path: 'publish/:id',
+      component: () => import('../views/home/publish.vue')
     }]
   }
 ]

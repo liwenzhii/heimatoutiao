@@ -64,7 +64,7 @@
         </el-col>
         <el-col :span="4">
             <el-row type="flex" justify="end" >
-                <span class='putIcon'  @click="putArticle"><i class="el-icon-edit"></i>
+                <span class='putIcon'  @click="putArticle(item.id)"><i class="el-icon-edit"></i>
                     修改</span>
                 <span class='deleteIcon' @click = 'deleteArticle(item.id)'><i class="el-icon-delete" ></i>
                     删除</span>
@@ -106,8 +106,8 @@ export default {
     }
   },
   methods: {
-    putArticle () {
-      this.$router.push('/home/publish')
+    putArticle (id) {
+      this.$router.push(`/home/publish/${id.toString()}`)
     },
     deleteArticle (id) {
       console.log(id.toString())
@@ -118,7 +118,6 @@ export default {
           method: 'delete',
           url: `/articles/${id.toString()}`
         }).then((res) => {
-          console.log(res)
           this.$message({
             message: '删除成功',
             type: 'success'
@@ -144,7 +143,6 @@ export default {
       }).then((res) => {
         this.articleList = res.data.results
         this.page.total = res.data.total_count
-        console.log(this.articleList)
       })
     },
     searchArticle () {
