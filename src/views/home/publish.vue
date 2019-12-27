@@ -60,9 +60,9 @@ export default {
 
   methods: {
     recepte (resource, index) {
-      console.log(resource)
+      console.log(resource, index)
       this.formData.cover.images[index] = resource
-      this.articleFormation()
+      // this.articleFormation()
     },
     changeType () {
       if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {

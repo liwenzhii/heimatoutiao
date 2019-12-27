@@ -4,7 +4,7 @@
             <!-- 发送请求获取素材 -->
             <div class="cardContainer">
                 <el-card v-for="item in list" :key="item.id" class="imagesContainer">
-                    <img :src="item.url ? item.url : defaultImg" alt="" class="materialImg">
+                    <img :src="item.url ? item.url : defaultImg"  class="materialImg" @click="sendPic(item.url)">
                 </el-card>
             </div>
              <el-row justify="center" type="flex" align="middle" style="height: 80px">
@@ -43,6 +43,9 @@ export default {
     }
   },
   methods: {
+    sendPic (url) {
+      this.$emit('returnData', url)
+    },
     uploadImg (params) {
       let file = params.file
       let formdt = new FormData()
@@ -70,7 +73,6 @@ export default {
       }).then((res) => {
         this.list = res.data.results
         this.page.total = res.data.total_count
-        console.log(this.list)
       })
     }
   },

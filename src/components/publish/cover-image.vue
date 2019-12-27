@@ -2,10 +2,10 @@
 <div class="coverPicContainer">
   <div v-for="(item, index) in imageList"  :key="index"  class="coverPic" @click="sunNum(index)">
       <img :src="item ? item : defaultImg" class="imgs" @click="isShow">
-        <el-dialog :visible = 'isVisible' :before-close="handleClose">
-            <select-image @returnData="reception(index)"></select-image>
-        </el-dialog>
   </div>
+        <el-dialog :visible = 'isVisible' :before-close="handleClose">
+            <select-image @returnData="reception"></select-image>
+        </el-dialog>
 </div>
 
 </template>
@@ -19,16 +19,18 @@ export default {
 
       defaultImg: require('../../assets/img/pic_bg.png'),
       isVisible: false,
-      coverIndex: null
+      coverIndex: -1
     }
   },
   methods: {
     sunNum (index) {
+      // alert('444')
       this.coverIndex = index
     },
-    reception (params, index) {
-      console.log(params, index)
+    reception (params) {
+      // console.log(params, index)
       this.$emit('returnParams', params, this.coverIndex)
+      this.handleClose()
     },
     isShow () {
       this.isVisible = true
