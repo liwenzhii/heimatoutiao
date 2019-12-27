@@ -1,8 +1,10 @@
 <template>
 <div class="coverPicContainer">
-  <div v-for="(item, index) in imageList"  :key="index"  class="coverPic">
-    <div style="text-align: center; margin-top: 15px">点击上传图片</div>
-      <img src="./../../assets/img/pic_bg.png" alt="" class="imgs">
+  <div v-for="(item, index) in imageList"  :key="index"  class="coverPic" @click="sunNum(index)">
+      <img :src="item ? item : defaultImg" class="imgs" @click="isShow">
+        <el-dialog :visible = 'isVisible' :before-close="handleClose">
+            <select-image @returnData="reception(index)"></select-image>
+        </el-dialog>
   </div>
 </div>
 
@@ -11,8 +13,31 @@
 <script>
 export default {
 
-  props: ['imageList']
+  props: ['imageList'],
+  data () {
+    return {
 
+      defaultImg: require('../../assets/img/pic_bg.png'),
+      isVisible: false,
+      coverIndex: null
+    }
+  },
+  methods: {
+    sunNum (index) {
+      this.coverIndex = index
+    },
+    reception (params, index) {
+      console.log(params, index)
+      this.$emit('returnParams', params, this.coverIndex)
+    },
+    isShow () {
+      this.isVisible = true
+    },
+    handleClose (done) {
+      this.isVisible = false
+    }
+
+  }
 }
 </script>
 
@@ -25,6 +50,7 @@ export default {
     }
     .coverPic {
         float: left;
+        margin: 10px
     }
     .imgs {
         width: 200px;
