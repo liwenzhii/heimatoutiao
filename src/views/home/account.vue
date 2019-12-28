@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import eventBus from '../../components/publish/eventBus'
 export default {
   data () {
     return {
@@ -61,6 +62,7 @@ export default {
           message: '上传头像成功',
           type: 'success'
         })
+        eventBus.$emit('same')
         this.getPersonage()
       })
     },
@@ -84,6 +86,7 @@ export default {
               message: '保存成功',
               type: 'success'
             })
+            eventBus.$emit('same')
           })
         }
       })

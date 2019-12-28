@@ -1,11 +1,12 @@
 <template>
-<div class="slideBgc" style="width: 230px">
+<div class="slideBgc" style='transition: all 0.5s' :style="{width: fold  ? '60px': '230px'  }">
     <div style="text-align: center; padding: 10px 0; background-color: #2e2f32">
         <img src="../../../assets/img/logo_admin.png" style="height: 35px">
     </div>
-  <el-menu router style="width:231px" background-color="#353b4e" text-color="#adafb5" >
+  <el-menu router :style="{ width: fold ? '60px' : '230px'}" background-color="#353b4e" text-color="#adafb5" >
       <el-menu-item index="/home">
           <span slot="title">首页</span>
+          <i class="el-icon-video-camera"></i>
       </el-menu-item>
       <el-submenu index='1'>
           <span slot="title">内容管理</span>
@@ -29,8 +30,19 @@
 </template>
 
 <script>
-export default {
+import eventBus from '../../publish/eventBus'
 
+export default {
+  data () {
+    return {
+      fold: false
+    }
+  },
+  created () {
+    eventBus.$on('closeOrOpen', () => {
+      this.fold = !this.fold
+    })
+  }
 }
 </script>
 
