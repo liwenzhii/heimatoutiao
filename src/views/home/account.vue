@@ -49,45 +49,41 @@ export default {
     }
   },
   methods: {
-    uploading (params) {
+    async uploading (params) {
       let file = params.file
       let formdt = new FormData()
       formdt.append('photo', file)
-      this.$http({
+      await this.$http({
         url: '/user/photo',
         method: 'patch',
         data: formdt
-      }).then(() => {
-        this.$message({
-          message: '上传头像成功',
-          type: 'success'
-        })
-        eventBus.$emit('same')
-        this.getPersonage()
       })
+      this.$message({
+        message: '上传头像成功',
+        type: 'success'
+      })
+      eventBus.$emit('same')
+      this.getPersonage()
     },
-    getPersonage () {
-      this.$http({
+    async getPersonage () {
+      let res = await this.$http({
         url: '/user/profile'
-      }).then((res) => {
-        this.formData = res.data
-        console.log(res)
       })
+      this.formData = res.data
     },
     checkoutForm () {
-      this.$refs.myForm.validate((isOk) => {
+      this.$refs.myForm.validate(async (isOk) => {
         if (isOk) {
-          this.$http({
+          await this.$http({
             url: '/user/profile',
             method: 'patch',
             data: this.formData
-          }).then(() => {
-            this.$message({
-              message: '保存成功',
-              type: 'success'
-            })
-            eventBus.$emit('same')
           })
+          this.$message({
+            message: '保存成功',
+            type: 'success'
+          })
+          eventBus.$emit('same')
         }
       })
     }

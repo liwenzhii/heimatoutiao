@@ -71,22 +71,20 @@ export default {
         this.formData.cover.images = ['', '', '']
       }
     },
-    articleFormation (id) {
-      this.$http({
+    async articleFormation (id) {
+      let res = await this.$http({
         url: `/articles/${id}`
-      }).then((res) => {
-        this.formData = res.data
       })
+      this.formData = res.data
     },
-    issue (draft, id) {
-      this.$http({
+    async issue (draft, id) {
+      await this.$http({
         url: id ? `/articles/${id}` : '/articles',
         method: id ? 'put' : 'post',
         params: { draft },
         data: this.formData
-      }).then(() => {
-        this.$router.push('/home/articles')
       })
+      this.$router.push('/home/articles')
     },
     checkout (draft) {
       this.$refs.all.validate(isOk => {
@@ -96,12 +94,11 @@ export default {
         }
       })
     },
-    getchannel () {
-      this.$http({
+    async getchannel () {
+      let res = await this.$http({
         url: '/channels'
-      }).then((res) => {
-        this.channelList = res.data.channels
       })
+      this.channelList = res.data.channels
     }
   },
   created () {

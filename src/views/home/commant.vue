@@ -53,44 +53,41 @@ export default {
     formatterBool (row, column, cellValue, index) {
       return row.comment_status ? '打开' : '关闭'
     },
-    getList () {
+    async getList () {
       this.loading = true
-      this.$http({
+      let res = await this.$http({
         url: '/articles',
         params: {
           response_type: 'comment',
           page: this.page.currentPage,
           per_page: this.page.pageSize
         }
-      }).then((res) => {
-        this.loading = false
-        this.list = res.data.results
-        this.page.total = res.data.total_count
       })
+      this.loading = false
+      this.list = res.data.results
+      this.page.total = res.data.total_count
     },
-    putComment (row) {
+    async putComment (row) {
       this.loading = true
       let mess = row.comment_status ? '关闭' : '打开'
-      this.$confirm(`你确定要${mess}这条评论吗？`).then(() => {
-        this.$http({
-          url: '/comments/status',
-          method: 'put',
-          params: {
-            article_id: row.id.toString()
-          },
-          data: {
-            allow_comment: !row.comment_status
-          }
-        })
-          .then(() => {
-            this.loading = false
-            this.$message({
-              type: 'success',
-              message: '操作成功'
-            })
-            this.getList()
-          })
+      await this.$confirm(`你确定要${mess}这条评论吗？`)
+      await this.$http({
+        url: '/comments/status',
+        method: 'put',
+        params: {
+          article_id: row.id.toString()
+        },
+        data: {
+          allow_comment: !row.comment_status
+        }
       })
+
+      this.loading = false
+      this.$message({
+        type: 'success',
+        message: '操作成功'
+      })
+      this.getList()
     }
   },
   created () {

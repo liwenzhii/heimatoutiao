@@ -8,6 +8,10 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '*',
+    component: () => import('../views/home/404.vue')
+  },
+  {
     path: '/',
     redirect: '/login'
   },

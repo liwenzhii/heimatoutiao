@@ -72,41 +72,37 @@ export default {
     }
   },
   methods: {
-    delMaterial (id) {
-      this.$confirm('你确定要删除吗？').then(() => {
-        this.$http({
-          method: 'delete',
-          url: `/user/images/${id}`
-        }).then(() => {
-          this.$message({
-            message: '删除成功',
-            type: 'success'
-          })
-          this.getPic()
-        })
+    async delMaterial (id) {
+      await this.$confirm('你确定要删除吗？')
+      await this.$http({
+        method: 'delete',
+        url: `/user/images/${id}`
       })
+      this.$message({
+        message: '删除成功',
+        type: 'success'
+      })
+      this.getPic()
     },
-    isCollect (item) {
-      this.$http({
+    async isCollect (item) {
+      await this.$http({
         url: `/user/images/${item.id}`,
         method: 'put',
         data: {
           collect: !item.is_collected
         }
-      }).then((res) => {
-        this.getPic()
       })
+      this.getPic()
     },
-    uploadImg (params) {
+    async uploadImg (params) {
       let form = new FormData()
       form.append('image', params.file)
-      this.$http({
+      await this.$http({
         url: '/user/images',
         data: form,
         method: 'post'
-      }).then((res) => {
-        this.getPic()
       })
+      this.getPic()
     },
     changePage (newPage) {
       this.page.currentPage = newPage
@@ -116,18 +112,17 @@ export default {
       this.page.currentPage = 1
       this.getPic()
     },
-    getPic () {
-      this.$http({
+    async getPic () {
+      let res = await this.$http({
         url: 'user/images',
         params: {
           collect: this.activeName === 'collect',
           page: this.page.currentPage,
           per_page: this.page.pageSize
         }
-      }).then(res => {
-        this.list = res.data.results
-        this.page.total = res.data.total_count
       })
+      this.list = res.data.results
+      this.page.total = res.data.total_count
     }
   },
   created () {
