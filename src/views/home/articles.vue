@@ -87,6 +87,7 @@
 </template>
 
 <script>
+import { getArticle, getChannel } from '../../actions/articles'
 export default {
   data () {
     return {
@@ -109,41 +110,27 @@ export default {
     putArticle (id) {
       this.$router.push(`/home/publish/${id.toString()}`)
     },
-    deleteArticle (id) {
-      console.log(id.toString())
-      // debugger
-
-      this.$confirm('你去定要删除吗？').then(() => {
-        this.$http({
-          method: 'delete',
-          url: `/articles/${id.toString()}`
-        }).then((res) => {
-          this.$message({
-            message: '删除成功',
-            type: 'success'
-
-          })
-          this.getSearchArticle()
-        }).catch(() => {
-
-        })
-      })
-    },
-    getChannels () {
+    async deleteArticle (id) {
+      await this.$confirm('你去定要删除吗？')
       this.$http({
-        url: '/channels'
-      }).then((res) => {
-        this.list = res.data.channels
+        method: 'delete',
+        url: `/articles/${id.toString()}`
       })
+      this.$message({
+        message: '删除成功',
+        type: 'success'
+
+      })
+      this.getSearchArticle()
     },
-    getArticle (params) {
-      this.$http({
-        url: '/articles',
-        params
-      }).then((res) => {
-        this.articleList = res.data.results
-        this.page.total = res.data.total_count
-      })
+    async getChannels () {
+      let res = await getChannel()
+      this.list = res.data.channels
+    },
+    async getArticle (params) {
+      let res = await getArticle(params)
+      this.articleList = res.data.results
+      this.page.total = res.data.total_count
     },
     searchArticle () {
       this.page.currentPage = 1
