@@ -4,7 +4,7 @@
         <img :src= "fold ? defaultImgTwo : defaultImg"   style="height: 35px">
     </div>
   <el-menu router :style="{ width: fold ? '60px' : '230px'}"
-  background-color="#353b4e" text-color="#adafb5" :collapse = 'fold' style='transition: all 0.5s'>
+  background-color="#353b4e" text-color="#adafb5" :collapse = 'fold' style='transition: all 0.1s'>
 
       <el-menu-item index="/home">
           <i class="el-icon-video-camera"></i>

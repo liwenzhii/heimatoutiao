@@ -45,6 +45,10 @@ const routes = [
     {
       path: 'account',
       component: () => import('../views/home/account.vue')
+    },
+    {
+      path: 'picture',
+      component: () => import('../views/home/fansData.vue')
     }]
   }
 ]
